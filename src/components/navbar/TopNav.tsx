@@ -1,12 +1,21 @@
+"use client";
 import { Button, Navbar, NavbarBrand, NavbarContent } from "@heroui/react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GiMatchTip } from "react-icons/gi";
 import NavLink from "./NavLink";
-import { auth } from "@/auth";
+import { getSession } from "next-auth/react";
 import UserMenu from "./UserMenu";
-export default async function TopNav() {
-  const session = await auth();
+import { Session } from "next-auth";
+
+
+export default function TopNav() {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    getSession().then((session: Session | null) => setSession(session));
+  }, []);
+
   return (
     <Navbar
       maxWidth="xl"

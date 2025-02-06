@@ -1,8 +1,20 @@
+'use client';
 import { auth, signOut } from "@/auth";
 import { Button } from "@heroui/react";
 import { FaRegSmile } from "react-icons/fa";
-export default async function Home() {
-  const session = await auth();
+import { useEffect, useState } from "react";
+import { Session } from "next-auth";
+
+export default function Home() {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    async function fetchSession() {
+      const sessionData = await auth();
+      setSession(sessionData);
+    }
+    fetchSession();
+  }, []);
   return (
     <div>
       <h1 className="text-3xl">Hello app!</h1>
@@ -12,7 +24,7 @@ export default async function Home() {
           <pre>{JSON.stringify(session, null, 2)}</pre>
           <form
             action={async () => {
-              "use server";
+              // "use server";
               await signOut();
             }}
           >
